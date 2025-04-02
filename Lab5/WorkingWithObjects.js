@@ -15,7 +15,6 @@ const module = {
 };
 
 export default function WorkingWithObjects(app) {
-  // Assignment routes
   app.get("/lab5/assignment", (req, res) => {
     res.json(assignment);
   });
