@@ -1,7 +1,7 @@
 import PathParameters from "./PathParameters.js";
 import QueryParameters from "./QueryParameter.js";
 import WorkingWithObjects from "./WorkingWithObjects.js";
-export default function Lab5(app) {
+export default function Lab5Routes(app) {
   app.get("/lab5/welcome", (req, res) => {
     res.send("Welcome to Lab 5");
   });
