@@ -15,9 +15,8 @@ export function enrollUserInCourse(userId, courseId) {
   return newEnrollment;
 }
 
-export function unenrollUserFromCourse(enrollmentId) {
+export function unEnrollUserFromCourse(userId, courseId) {
   Database.enrollments = Database.enrollments.filter(
-    (e) => e._id !== enrollmentId
+    (e) => !(e.user === userId && e.course === courseId)
   );
-  return { status: "deleted" };
 }

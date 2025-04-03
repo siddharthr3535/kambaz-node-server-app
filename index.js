@@ -6,18 +6,28 @@ import UserRoutes from "./Kambaz/Users/routes.js";
 import session from "express-session";
 import CourseRoutes from "./Kambaz/Courses/routes.js";
 import assignmentRoutes from "./Kambaz/Assignments/routes.js";
+import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
 import "dotenv/config";
 
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://kambazwebdev.netlify.app",
+];
+
 app.use(
   cors({
     credentials: true,
-    origin:
-      "https://kambazwebdev.netlify.app" ||
-      process.env.NETLIFY_URL ||
-      "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like curl/postman) or from the allowed list
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   })
 );
 const sessionOptions = {
@@ -44,4 +54,5 @@ Hello(app);
 assignmentRoutes(app);
 
 ModuleRoutes(app);
+EnrollmentRoutes(app);
 app.listen(process.env.PORT || 4000);
