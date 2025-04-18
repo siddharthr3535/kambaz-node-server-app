@@ -13,7 +13,6 @@ import ModuleRoutes from "./Kambaz/Modules/routes.js";
 
 const app = express();
 
-// ✅ Trust proxy so secure cookies work in production
 app.set("trust proxy", 1);
 
 const allowedOrigins = [
