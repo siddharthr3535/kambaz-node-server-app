@@ -10,20 +10,25 @@ import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
 import "dotenv/config";
 import mongoose from "mongoose";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
+
 const app = express();
+
+// ✅ Trust proxy so secure cookies work in production
+app.set("trust proxy", 1);
 
 const allowedOrigins = [
   "http://localhost:5173",
   "https://kambazwebdev.netlify.app",
 ];
+
 const CONNECTION_STRING =
   process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
 mongoose.connect(CONNECTION_STRING);
+
 app.use(
   cors({
     credentials: true,
     origin: function (origin, callback) {
-      // Allow requests with no origin (like curl/postman) or from the allowed list
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -32,29 +37,29 @@ app.use(
     },
   })
 );
+
+// ✅ Apply secure cookie settings always
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
-};
-
-if (process.env.NODE_ENV !== "development") {
-  sessionOptions.proxy = true;
-  sessionOptions.cookie = {
+  proxy: true,
+  cookie: {
     sameSite: "none",
     secure: true,
-  };
-}
-app.use(session(sessionOptions));
+  },
+};
 
+app.use(session(sessionOptions));
 app.use(express.json());
+
+// ✅ All routes
 UserRoutes(app);
 CourseRoutes(app);
 Lab5Routes(app);
 Hello(app);
-
 assignmentRoutes(app);
-
 ModuleRoutes(app);
 EnrollmentRoutes(app);
+
 app.listen(process.env.PORT || 4000);
