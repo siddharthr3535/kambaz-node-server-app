@@ -38,15 +38,14 @@ app.use(
   })
 );
 
-// ✅ Apply secure cookie settings always
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
   proxy: true,
   cookie: {
-    sameSite: "none",
-    secure: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production", // Only require HTTPS in production
   },
 };
 
