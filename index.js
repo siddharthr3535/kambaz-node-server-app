@@ -8,7 +8,7 @@ import CourseRoutes from "./Kambaz/Courses/routes.js";
 import assignmentRoutes from "./Kambaz/Assignments/routes.js";
 import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
 import "dotenv/config";
-
+import mongoose from "mongoose";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 const app = express();
 
@@ -16,7 +16,9 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://kambazwebdev.netlify.app",
 ];
-
+const CONNECTION_STRING =
+  process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
+mongoose.connect(CONNECTION_STRING);
 app.use(
   cors({
     credentials: true,
