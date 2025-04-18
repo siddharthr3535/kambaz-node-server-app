@@ -42,18 +42,18 @@ export default function EnrollmentRoutes(app) {
   });
 
   // Get all enrollments for current user
-  app.get("/api/users/current/enrollments", async (req, res) => {
-    const currentUser = req.session["currentUser"];
-    if (!currentUser) {
-      return res.sendStatus(401);
-    }
+  // app.get("/api/users/current/enrollments", async (req, res) => {
+  //   const currentUser = req.session["currentUser"];
+  //   if (!currentUser) {
+  //     return res.sendStatus(401);
+  //   }
 
-    try {
-      const enrollments = await dao.findEnrollmentsByUser(currentUser._id);
-      res.json(enrollments);
-    } catch (error) {
-      console.error("Error fetching enrollments:", error);
-      res.sendStatus(500);
-    }
-  });
+  //   try {
+  //     const enrollments = await dao.findEnrollmentsByUser(currentUser._id);
+  //     res.json(enrollments);
+  //   } catch (error) {
+  //     console.error("Error fetching enrollments:", error);
+  //     res.sendStatus(500);
+  //   }
+  // });
 }
