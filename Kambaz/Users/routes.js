@@ -157,6 +157,18 @@ export default function UserRoutes(app) {
     const status = await enrollmentsDao.unenrollUserFromCourse(uid, cid);
     res.send(status);
   };
+  // ✅ GET enrollments for current user
+  app.get("/api/users/current/enrollments", async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
+      return res.status(401).send("Not logged in");
+    }
+    const enrollments = await enrollmentsDao.findEnrollmentsByUser(
+      currentUser._id
+    );
+    res.json(enrollments);
+  });
+
   app.post("/api/users/:uid/courses/:cid", enrollUserInCourse);
   app.delete("/api/users/:uid/courses/:cid", unenrollUserFromCourse);
   app.get("/api/users/:uid/courses", findCoursesForUser);
