@@ -13,8 +13,6 @@ import ModuleRoutes from "./Kambaz/Modules/routes.js";
 
 const app = express();
 
-app.set("trust proxy", 1);
-
 const allowedOrigins = [
   "http://localhost:5173",
   "https://kambazwebdev.netlify.app",
@@ -27,31 +25,27 @@ mongoose.connect(CONNECTION_STRING);
 app.use(
   cors({
     credentials: true,
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: ["http://localhost:5173", "https://kambazwebdev.netlify.app"],
   })
 );
+app.set("trust proxy", 1);
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
-  proxy: true,
+  proxy: isProduction, // Only needed in production behind a proxy (like Render)
   cookie: {
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    secure: process.env.NODE_ENV === "production", // Only require HTTPS in production
+    sameSite: isProduction ? "none" : "lax", // lax for HTTP local, none for cross-site HTTPS
+    secure: isProduction, // true for HTTPS, false for localhost
   },
 };
-
 app.use(session(sessionOptions));
+
 app.use(express.json());
 
-// ✅ All routes
 UserRoutes(app);
 CourseRoutes(app);
 Lab5Routes(app);

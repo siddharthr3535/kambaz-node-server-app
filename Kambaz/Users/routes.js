@@ -96,11 +96,10 @@ export default function UserRoutes(app) {
   };
   app.post("/api/users/signout", signout);
 
-  // ✅ Profile
   const profile = (req, res) => {
     const currentUser = req.session["currentUser"];
     if (!currentUser) {
-      res.sendStatus(401);
+      res.json(null); // Or res.json({ authenticated: false })
       return;
     }
     res.json(currentUser);
@@ -123,6 +122,7 @@ export default function UserRoutes(app) {
   };
   const findCoursesForUser = async (req, res) => {
     const currentUser = req.session["currentUser"];
+
     if (!currentUser) {
       res.sendStatus(401);
       return;
